@@ -4,7 +4,7 @@
   "description": "type verification for your javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js"
   },
   "repository": "git+https://github.com/mofax/typechecked.git",
   "keywords": [],
@@ -13,5 +13,8 @@
   "bugs": {
     "url": "https://github.com/mofax/typechecked/issues"
   },
-  "homepage": "https://github.com/mofax/typechecked#readme"
+  "homepage": "https://github.com/mofax/typechecked#readme",
+  "devDependencies": {
+    "roast.it": "^1.0.5"
+  }
 }
