@@ -1,3 +1,7 @@
+<span>
+<img src="https://travis-ci.org/mofax/typechecked.svg?branch=master" />
+<span>
+
 # typechecked
 
 type verification for your javascript
