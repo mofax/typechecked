@@ -17,4 +17,13 @@ typechecked('str', 'number'); // false
 typechecked({}, 'object'); // true
 typechecked([], 'array'); // true
 typechecked([], 'object'); // false
-``
+```
+
+## types you can check
+
+* string
+* number
+* NaN
+* array
+* object
+* boolean
