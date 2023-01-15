@@ -1,13 +1,11 @@
 {
   "name": "typechecked",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Runtime type validation for your javascript",
   "main": "./lib/src.js",
-  "types": "./types",
   "type": "module",
   "files": [
-    "lib",
-    "types"
+    "lib"
   ],
   "scripts": {
     "dev": "tsc --watch",

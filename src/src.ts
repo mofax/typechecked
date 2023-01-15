@@ -13,7 +13,7 @@ export function checkType<T extends unknown, S extends (value: T) => any>(
     return res as TypeToReturn;
 }
 
-
+export * from "./assertions.js";
 export * from './checks/common.js';
 export * from './checks/strings.js';
 export * from './checks/records.js';
