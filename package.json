@@ -1,6 +1,6 @@
 {
   "name": "typechecked",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Runtime type validation for your javascript",
   "main": "./lib/src.js",
   "type": "module",
