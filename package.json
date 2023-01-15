@@ -3,11 +3,9 @@
   "version": "0.0.5",
   "description": "Runtime type validation for your javascript",
   "main": "./lib/src.js",
-  "types": "./types/src.d.ts",
   "type": "module",
   "files": [
-    "lib",
-    "types"
+    "lib"
   ],
   "scripts": {
     "dev": "tsc --watch",
