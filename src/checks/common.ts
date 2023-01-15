@@ -1,6 +1,12 @@
 import { TypeCheckedError } from "../util/errors.js";
 
 export type ValidatorFunction<T> = (value: T) => T
+export type LiteralBase =
+    | string
+    | number
+    | bigint
+    | boolean
+
 export type Primitive =
     | string
     | number
@@ -9,6 +15,7 @@ export type Primitive =
     | boolean
     | null
     | undefined;
+
 export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 
 function maxNumber(num: number, limit: number) {
@@ -68,4 +75,17 @@ export function isEnum<A extends unknown[]>(...args: [...A]) {
         }
         return value;
     };
+}
+
+export function isLiteral<T extends LiteralBase>(base: T) {
+    function check(value: unknown): value is T {
+        return value === base;
+    }
+
+    return function (value: unknown) {
+        if (check(value)) {
+            return value;
+        }
+        throw new TypeCheckedError(`Expected ${value} to be ${base}`);
+    }
 }

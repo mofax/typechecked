@@ -2,9 +2,7 @@ import { TypeCheckedError } from "../util/errors.js";
 import { ValidatorFunction } from "./common.js";
 
 type SimpleFunc = (value: any) => any
-type CheckArgType<S extends SimpleFunc> = [S, ...ValidatorFunction<ReturnType<S>>[]]
-type CheckArgRecord<S extends SimpleFunc = SimpleFunc> = { [K: string]: CheckArgType<S> }
-
+type CheckArgRecord<S extends SimpleFunc = SimpleFunc> = { [K: string]: [S, ...ValidatorFunction<ReturnType<S>>[]] }
 // type CheckObjectInput<CBR> = CBR extends CheckArgRecord ? {
 //     [Key in keyof CBR]: [CBR[Key][0], ...ValidatorFunction<ReturnType<CBR[Key][0]>>[]]
 // } : never
