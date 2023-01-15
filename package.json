@@ -1,0 +1,29 @@
+{
+  "name": "typechecked",
+  "version": "0.0.3",
+  "description": "Runtime type validation for your javascript",
+  "main": "./lib/src.js",
+  "types": "./types",
+  "type": "module",
+  "files": [
+    "lib",
+    "types"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "test": "tsc && node --test",
+    "prepublishOnly": "tsc"
+  },
+  "repository": "git+https://github.com/mofax/typechecked.git",
+  "keywords": [],
+  "author": "Alloys Mila <mila.alloys@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mofax/typechecked/issues"
+  },
+  "homepage": "https://github.com/mofax/typechecked#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
+  }
+}
