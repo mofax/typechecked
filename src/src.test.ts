@@ -1,52 +1,36 @@
-import test from 'node:test';
+import test from "node:test";
 import assert from "node:assert";
-import { checkType, isArray, isRecord } from './src.js'
-import { isBoolean, isFunction, isNumber, isString } from "./assertions.js";
-
+import { isArray, isRecord } from "./src.js";
+import { isBoolean, isNumber, isString } from "./assertions.js";
 
 test("src", () => {
-    test("checkType", () => {
-        assert.throws(() => {
-            checkType("full", isBoolean)
-        })
+	test("checkArray", () => {
+		const nums = isArray(isNumber)([1, 3, 4, 5]);
+		isArray(isString)(["int", "string", "number"]);
 
-        const bool = checkType(true, isBoolean);
-        const num = checkType(10, isNumber);
-        const str = checkType('str', isString);
+		// should compile
+		const sum = nums.reduce(function (previousValue, currentValue) {
+			return previousValue + currentValue;
+		});
 
-        assert(bool);
-        assert((num + 1) === 11)
-        assert(str.length === 3);
-        assert(isFunction(str.toUpperCase));
-    })
+		assert(sum === 13);
 
-    test("checkArray", () => {
-        const nums = isArray(isNumber)([1, 3, 4, 5])
-        isArray(isString)(['int', 'string', 'number'])
+		assert.throws(() => {
+			isArray(isNumber)(["1", 2, 4, 5]);
+		});
+	});
 
-        // should compile
-        let sum = nums.reduce(function (previousValue, currentValue) {
-            return previousValue + currentValue;
-        });
+	test("checkRecord", () => {
+		const validator = isRecord({
+			key: [isBoolean],
+			name: [isString],
+		});
 
-        assert(sum === 13)
-
-        assert.throws(() => {
-            isArray(isNumber)(["1", 2, 4, 5]);
-        })
-    })
-
-    test('checkRecord', () => {
-        const validator = isRecord({
-            key: [isBoolean],
-            name: [isString]
-        })
-
-        const val = validator({
-            key: true,
-            name: 'Arnold'
-        })
-        assert(val.key);
-        assert(val.name.length === 6);
-    })
-})
+		const val = validator({
+			key: true,
+			name: "Arnold",
+		});
+		assert(val.key);
+		assert(val.name.length === 6);
+	});
+});

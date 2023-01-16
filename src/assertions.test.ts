@@ -1,18 +1,20 @@
-import test from 'node:test';
-import assert from 'node:assert';
+import test from "node:test";
+import assert from "node:assert";
 
-import { isString } from "./assertions.js"
+import { isString } from "./assertions.js";
 
 test("assertions.ts", () => {
-    test("isString", () => {
-        const val = isString("YES");
-        assert.strictEqual(val, "YES");
+	test("isString", () => {
+		const val = isString("YES");
+		assert.strictEqual(val, "YES");
 
-        assert.throws(() => {
-            isString(10)
-        }, {
-            name: 'TypeError'
-        })
-
-    })
-})
+		assert.throws(
+			() => {
+				isString(10);
+			},
+			{
+				name: "TypeError",
+			}
+		);
+	});
+});
