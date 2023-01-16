@@ -10,7 +10,8 @@
 	"scripts": {
 		"dev": "tsc --watch",
 		"test": "tsc && node --test",
-		"format": "eslint . && prettier . src/**/*.ts",
+		"lint": "eslint . && prettier . src/**/*.ts",
+		"lint:fix": "eslint . --fix && prettier . src/**/*.ts --write",
 		"prepublishOnly": "tsc"
 	},
 	"repository": "git+https://github.com/mofax/typechecked.git",

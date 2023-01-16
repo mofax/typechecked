@@ -1,6 +1,23 @@
 import { TypeCheckedError } from "../util/errors.js";
 import { ValidatorFunction } from "./common.js";
 
+/**
+ * Validates that a variable is an array without
+ * Checking types of the childres
+ */
+export function isArrayUnknown(value: unknown): Array<unknown> {
+	if (Array.isArray(value)) {
+		return value;
+	}
+	throw new TypeCheckedError(`Expected an array but got ${typeof value}`);
+}
+
+/**
+ * Returns a function that validates the individual items in an array
+ * @param checker type asserstion finction
+ * @param args a list of function to validate individual array items
+ * @returns
+ */
 export function isArray<S extends (value: unknown) => unknown, C extends ReturnType<S>>(
 	checker: S,
 	...args: ValidatorFunction<C>[]
