@@ -86,13 +86,6 @@ export function isObject(value: unknown): object {
 	throw new TypeCheckedError(`Expected value to be an object, but got ${typeof value}`);
 }
 
-export function isPrimitive(value: unknown) {
-	if ((typeof value !== "object" && typeof value !== "function") || value === null) {
-		throw new TypeCheckedError("Value is not a primitive");
-	}
-	return value;
-}
-
 export function isFunction<T>(value: T): T {
 	if (typeof value !== "function") {
 		throw new TypeCheckedError(`Expected value to be a function but go ${typeof value}`);
