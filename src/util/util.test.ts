@@ -1,4 +1,4 @@
-import { tcpipe } from "./util.js";
+import { tcpipe, tcpipe_t } from "./util.js";
 import test from "node:test";
 import assert from "node:assert";
 import { isNumber, isString } from "../assertions.js";
@@ -28,5 +28,15 @@ test("util", () => {
 			checkerNum(4);
 			checkerNum(11);
 		});
+	});
+
+	test("tcpipe_t", () => {
+		function parse(str: string) {
+			return parseInt(str);
+		}
+
+		const checker = tcpipe_t(isString, parse);
+		const val = checker("123");
+		assert(val === 123);
 	});
 });

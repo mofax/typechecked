@@ -1,11 +1,27 @@
 import { TypeCheckedError } from "../util/errors.js";
 
+export type Optional<T> = T | undefined;
 export type ValidatorFunction<T> = (value: T) => T;
 export type LiteralBase = string | number | bigint | boolean;
-
 export type Primitive = string | number | symbol | bigint | boolean | null | undefined;
-
 export type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
+export type Tuple<T, N extends number, R extends readonly T[] = []> = R["length"] extends N
+	? R
+	: Tuple<T, N, readonly [T, ...R]>;
+export type Range<T extends number> = number extends T ? number : RangeComputer<T, []>;
+type RangeComputer<T extends number, R extends unknown[]> = R["length"] extends T
+	? R["length"]
+	: R["length"] | RangeComputer<T, [T, ...R]>;
+
+export type FixedArray<K, T extends number> = Array<K> & {
+	readonly length: Range<T>;
+	[I: number]: K;
+	[Symbol.iterator]: () => IterableIterator<T>;
+};
+
+export type OptionalTuple<T, N extends number, R extends readonly T[] = []> = R["length"] extends N
+	? R
+	: Tuple<Optional<T>, N, readonly [T, ...R]>;
 
 function maxNumber(num: number, limit: number) {
 	if (num > limit) {
