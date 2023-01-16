@@ -1,16 +1,32 @@
 import { tcpipe } from "./util.js";
 import test from "node:test";
 import assert from "node:assert";
-import { isString } from "../assertions.js";
+import { isNumber, isString } from "../assertions.js";
 import { isHex } from "../checks/strings.js";
+import { isMin, isMax } from "../checks/common.js";
 
 test("util", () => {
-	test("tcpipe", () => {
-		const checker = tcpipe(isString, isHex);
-		const val = checker("123ABF");
-		assert(val === "123ABF");
-		assert.throws(() => {
-			checker("PROof");
-		});
-	});
+    test("tcpipe", () => {
+        const checker = tcpipe(isString, isHex);
+        const val = checker("123ABF");
+        assert(val === "123ABF");
+        assert.throws(() => {
+            checker("PROof");
+        });
+    });
+
+    test("tcpipe - isMax, isMin", () => {
+        const checker = tcpipe(isString, isMin(5), isMax(10));
+        checker("PROof");
+        assert.throws(() => {
+            checker("PROo");
+        });
+
+        const checkerNum = tcpipe(isNumber, isMin(5), isMax(10));
+        checkerNum(7);
+        assert.throws(() => {
+            checkerNum(4);
+            checkerNum(11)
+        });
+    });
 });

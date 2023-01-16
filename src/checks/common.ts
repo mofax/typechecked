@@ -9,39 +9,50 @@ export type Json = string | number | boolean | null | Json[] | { [key: string]: 
 
 function maxNumber(num: number, limit: number) {
 	if (num > limit) {
-		throw new TypeCheckedError(`Expected value to be a number below ${limit}`);
+		throw new TypeCheckedError(`Expected value ${num} equal to or below ${limit}`);
 	}
 	return num;
 }
 
 function minNumber(num: number, limit: number) {
 	if (num < limit) {
-		throw new TypeCheckedError(`Expected value to be a number above ${limit}`);
+		throw new TypeCheckedError(`Expected value ${num} to be equal to or above ${limit}`);
 	}
 	return num;
 }
 
 function maxString(num: string, limit: number) {
 	if (num.length > limit) {
-		throw new TypeCheckedError(`Expected length of string to be a number below ${limit}`);
+		throw new TypeCheckedError(`Expected length ${num.length} of string to be equal to or below ${limit}`);
 	}
 	return num;
 }
 
 function minString(num: string, limit: number) {
-	if (num.length <= limit) {
+	if (num.length < limit) {
 		throw new TypeCheckedError(
-			`Expected length of string to be a number equal to or above ${limit}`
+			`Expected length ${num.length} of string to be a number equal to or above ${limit}`
 		);
 	}
 	return num;
 }
 
-export function isMax(value: number | string, limit: number) {
-	if (typeof value === "number") {
-		return maxNumber(value, limit);
+export function isMax(limit: number) {
+	return function <T extends string | number>(value: T) {
+		if (typeof value === "number") {
+			return maxNumber(value, limit) as T;
+		}
+		return maxString(value, limit) as T;
 	}
-	return maxString(value, limit);
+}
+
+export function isMin(limit: number) {
+	return function <T extends number | string>(value: T) {
+		if (typeof value === "number") {
+			return minNumber(value, limit) as T;
+		}
+		return minString(value, limit) as T;
+	}
 }
 
 export function isDefined<A>(val: A, message?: string) {
@@ -49,13 +60,6 @@ export function isDefined<A>(val: A, message?: string) {
 		throw new TypeCheckedError(message || `Value cannot be null or undefined`);
 	}
 	return val;
-}
-
-export function isMin(value: number | string, limit: number) {
-	if (typeof value === "number") {
-		return minNumber(value, limit);
-	}
-	return minString(value, limit);
 }
 
 export function isEnum<A extends unknown[]>(...args: [...A]) {
