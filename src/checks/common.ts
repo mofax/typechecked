@@ -23,7 +23,9 @@ function minNumber(num: number, limit: number) {
 
 function maxString(num: string, limit: number) {
 	if (num.length > limit) {
-		throw new TypeCheckedError(`Expected length ${num.length} of string to be equal to or below ${limit}`);
+		throw new TypeCheckedError(
+			`Expected length ${num.length} of string to be equal to or below ${limit}`
+		);
 	}
 	return num;
 }
@@ -43,7 +45,7 @@ export function isMax(limit: number) {
 			return maxNumber(value, limit) as T;
 		}
 		return maxString(value, limit) as T;
-	}
+	};
 }
 
 export function isMin(limit: number) {
@@ -52,7 +54,7 @@ export function isMin(limit: number) {
 			return minNumber(value, limit) as T;
 		}
 		return minString(value, limit) as T;
-	}
+	};
 }
 
 export function isDefined<A>(val: A, message?: string) {
