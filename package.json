@@ -1,6 +1,6 @@
 {
 	"name": "typechecked",
-	"version": "0.0.13",
+	"version": "0.0.14",
 	"description": "Typescript runtime type validation",
 	"main": "src/src.ts",
 	"type": "module",
