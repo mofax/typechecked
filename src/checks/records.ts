@@ -1,103 +1,59 @@
+import { isObject } from "../assertions.js";
 import { TypeCheckedError } from "../util/errors.js";
 
-type IsRecordInput = { [K: string]: (arg: unknown) => unknown };
-
-type IsRecordReturn<CBR extends IsRecordInput> = {
-	[Key in keyof CBR]: ReturnType<CBR[Key]>;
+export type RecordInput = {
+	[key: string | number | symbol]: ((arg: unknown) => unknown) | RecordInput;
 };
 
-type IsRecordOptions = {
+type RecursiveRecordReturn<T> = T extends RecordInput ? RecordReturn<T> : never;
+
+type RecordReturn<T extends RecordInput> = {
+	[K in keyof T]: T[K] extends (arg: unknown) => infer R ? R : RecursiveRecordReturn<T[K]>;
+};
+
+type RecordValidatorOptions = {
 	lazy?: boolean;
+	partial?: boolean;
 };
 
-export function isRecord<T extends IsRecordInput>(validations: T, options: IsRecordOptions = {}) {
-	return function (value: unknown): IsRecordReturn<T> {
-		if (typeof value !== "object") {
-			throw new TypeCheckedError(`Expected value to be an object`);
-		}
-
-		let errorCount = 0;
-		const errors: { [K: string]: string } = Object.create(null);
-		const responses = Object.create(null);
-
-		for (const entry of Object.entries(validations)) {
-			const [key, validator] = entry;
-			const descriptor = Object.getOwnPropertyDescriptor(value, key);
-
-			if (!descriptor) {
-				if (options.lazy) {
-					throw new TypeCheckedError(`Expected value of key ${key} is undefined`);
-				} else {
-					errorCount++;
-					errors[key] = "Value is undefined";
-					continue;
-				}
-			}
-
-			try {
-				responses[key] = validator(descriptor.value);
-			} catch (err) {
-				const error = err as Error;
-				if (options.lazy) {
-					throw error;
-				} else {
-					errors[key] = error.message;
-				}
-			}
-		}
-
-		if (errorCount !== 0) {
-			const errorValues = Object.values(errors);
-			const error = new TypeCheckedError(errorValues.join("/n"));
-			error.data = errors;
-			throw error;
-		}
-
-		return responses;
-	};
-}
-
-export function isPartialRecord<T extends IsRecordInput>(
+export function createRecordValidator<T extends RecordInput, R extends RecordValidatorOptions>(
 	validations: T,
-	options: IsRecordOptions = {}
+	options: R = Object.create({ lazy: true, partial: false })
 ) {
-	return function (value: unknown): Partial<IsRecordReturn<T>> {
-		if (typeof value !== "object") {
-			throw new TypeCheckedError(`Expected value to be an object`);
-		}
+	function validateRecord(arg: T, _target: unknown, parent = "") {
+		const target = isObject(_target, `Key ${parent} was expected to be an object`);
+		const validated = Object.create(null);
+		const entries = Object.entries(arg);
 
-		const errorCount = 0;
-		const errors: { [K: string]: string } = Object.create(null);
-		const responses = Object.create(null);
-
-		for (const entry of Object.entries(validations)) {
-			const [key, validator] = entry;
-			const descriptor = Object.getOwnPropertyDescriptor(value, key);
-
-			if (!descriptor) {
-				responses[key] = undefined;
-				continue;
-			}
-
-			try {
-				responses[key] = validator(descriptor.value);
-			} catch (err) {
-				const error = err as Error;
-				if (options.lazy) {
-					throw error;
-				} else {
-					errors[key] = error.message;
+		for (const entry of entries) {
+			const [key, value] = entry;
+			if (typeof value === "function") {
+				try {
+					const targetKey = target[key];
+					if (options.partial && targetKey === undefined) {
+						validated[key] = undefined
+					} else {
+						validated[key] = value.call(null, target[key]);
+					}
+				} catch (err) {
+					const error = err as Error;
+					const parentPrefix = parent.length ? `${parent}.` : "";
+					const msg = `Key ${parentPrefix}${key} failed validation: ${error.message}`;
+					throw new TypeCheckedError(msg);
 				}
+			} else {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				validated[key] = validateRecord(arg[key] as any, target[key], key);
 			}
 		}
 
-		if (errorCount !== 0) {
-			const errorValues = Object.values(errors);
-			const error = new TypeCheckedError(errorValues.join("/n"));
-			error.data = errors;
-			throw error;
-		}
+		type PartialOveride = (typeof options)["partial"] extends true
+			? Partial<RecordReturn<T>>
+			: RecordReturn<T>;
+		return validated as PartialOveride;
+	}
 
-		return responses;
+	return function (value: unknown) {
+		return validateRecord(validations, value);
 	};
 }

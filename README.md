@@ -43,16 +43,6 @@ import { isObject } from 'typechecked';
 import { isFunction } from 'typechecked';
 ```
 
-### Complex types
-
-```typescript
-import { isArrayUnknown } from 'typechecked';
-import { isArray } from 'typechecked';
-import { isTuple } from 'typechecked';
-import { isRecord } from 'typechecked';
-import { isPartialRecord } from 'typechecked';
-````
-
 ### Pipe functions
 
 Pipe functions are used to combine multiple type checks into one. They are useful when you want to check if a value matches other conditions apart from just the type. Or if you want to transform a value from the original type before returning it.
@@ -71,7 +61,7 @@ const validator = tcpipe(
   (value) => value.toUpperCase(),
 );
 
-const value: string = validator('hello');
+const value: string = validator('hello'); // value === 'HELLO'
 ```
 
 #### tcpipe_t
@@ -85,5 +75,5 @@ const validator = tcpipe_t(
   (value) => parseInt(value, 16),
 );
 
-const value: number = validator('FF1233');
+const value: number = validator('FF1233'); // value === 16716339
 ```
