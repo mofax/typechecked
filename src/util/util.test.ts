@@ -1,5 +1,5 @@
 import { tcpipe, tcpipe_t } from "./util.js";
-import test from "node:test";
+import { test} from "bun:test";
 import assert from "node:assert";
 import { isNumber, isString } from "../assertions.js";
 import { isHex } from "../checks/strings.js";

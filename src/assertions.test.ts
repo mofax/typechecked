@@ -1,4 +1,4 @@
-import test from "node:test";
+import {expect, test } from "bun:test";
 import assert from "node:assert";
 
 import { isString } from "./assertions.js";

@@ -83,12 +83,13 @@ export function isDate(value: unknown, msg?: string): Date {
 	return val;
 }
 
-export function isObject(value: unknown, msg?: string): object {
+type ObjectLike = { [P: string | number | symbol]: unknown }
+export function isObject(value: unknown, msg?: string): ObjectLike {
 	if (typeof value === "object") {
 		if (Array.isArray(value)) {
 			throw new TypeCheckedError(msg || `Expected value to be an object, but got an array`);
 		}
-		if (value !== null) return value;
+		if (value !== null) return value as ObjectLike
 	}
 	throw new TypeCheckedError(msg || `Expected value to be an object, but got ${typeof value}`);
 }
