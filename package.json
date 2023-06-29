@@ -1,18 +1,18 @@
 {
 	"name": "typechecked",
 	"version": "0.0.13",
-	"description": "Runtime type validation for your javascript",
-	"main": "./lib/src.js",
+	"description": "Typescript runtime type validation",
+	"main": "src/src.ts",
 	"type": "module",
 	"files": [
-		"lib"
+		"src"
 	],
 	"scripts": {
 		"dev": "tsc --watch",
 		"test": "tsc && node --test",
 		"lint": "eslint . && prettier . src/**/*.ts",
 		"lint:fix": "eslint . --fix && prettier . src/**/*.ts --write",
-		"prepublishOnly": "tsc"
+		"prepublishOnly": "bun test"
 	},
 	"repository": "git+https://github.com/mofax/typechecked.git",
 	"keywords": [],
