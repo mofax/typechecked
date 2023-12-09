@@ -14,7 +14,10 @@
 		"lint:fix": "eslint . --fix && prettier . src/**/*.ts --write",
 		"prepublishOnly": "bun test"
 	},
-	"repository": "git+https://github.com/mofax/typechecked.git",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mofax/typechecked.git"
+	},
 	"keywords": [],
 	"author": "Alloys Mila <mila.alloys@gmail.com>",
 	"license": "ISC",
