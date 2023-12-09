@@ -79,26 +79,3 @@ export function isDefined<A>(val: A, message?: string) {
 	}
 	return val;
 }
-
-export function isEnum<A extends unknown[]>(...args: [...A]) {
-	const s = new Set(args);
-	return function (value: unknown): [...A][number] {
-		if (!s.has(value)) {
-			throw new TypeError(`Value ${value} should be one of [${args.join(". ")}]`);
-		}
-		return value;
-	};
-}
-
-export function isLiteral<T extends LiteralBase>(base: T) {
-	function check(value: unknown): value is T {
-		return value === base;
-	}
-
-	return function (value: unknown) {
-		if (check(value)) {
-			return value;
-		}
-		throw new TypeCheckedError(`Expected ${value} to be ${base}`);
-	};
-}

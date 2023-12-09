@@ -18,11 +18,11 @@ export function isArrayUnknown(value: unknown): Array<unknown> {
  * @param args a list of function to validate individual array items
  * @returns
  */
-export function isArray<S extends (value: unknown) => unknown, C extends ReturnType<S>>(
+export function createArrayValidator<S extends (value: unknown) => unknown, C extends ReturnType<S>>(
 	checker: S,
 	...args: ValidatorFunction<C>[]
 ) {
-	return function (value: unknown) {
+	return function (value: unknown): C[] {
 		if (!Array.isArray(value)) {
 			throw new TypeCheckedError(`Expected value to be an array but found ${typeof value}`);
 		}
@@ -58,7 +58,7 @@ type ReturnTypeExtractor<
  * For example
  *
  * ```
- *  const tupleCheck = isTuple(isString, isBoolean);
+ *  const tupleCheck = createTupleValidator(isString, isBoolean);
  *  // tupleCheck is now a function that can be used for validation
  *
  *  const checked = tupleCheck["true", false];
@@ -69,7 +69,7 @@ type ReturnTypeExtractor<
  * ```
  *
  */
-export function isTuple<A extends Readonly<ValidatorFunction<unknown>[]>>(...arg: A) {
+export function createTupleValidator<A extends Readonly<ValidatorFunction<unknown>[]>>(...arg: A) {
 	return function check(value: unknown) {
 		if (!Array.isArray(value)) {
 			throw new TypeCheckedError(`Expected value to be an array but found ${typeof value}`);
@@ -86,7 +86,7 @@ export function isTuple<A extends Readonly<ValidatorFunction<unknown>[]>>(...arg
 				argItem(value[index]);
 			} catch (err) {
 				const error = err as Error;
-				throw new TypeCheckedError(`Error at ${index}: ${error.message}`);
+				throw new TypeCheckedError(`Tuple validation error at index [${index}]: ${error.message}`);
 			}
 		});
 
